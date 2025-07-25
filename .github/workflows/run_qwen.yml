@@ -1,40 +1,23 @@
-name: CI – Run Qwen3-Coder
-
 on:
   push:
-    branches: [ main ]
     paths:
-      - 'llama_cpp_setup.sh'
-      - 'run_qwen.sh'
-      - 'model_download.py'
-      - 'tool_calling_example.py'
+      - 'scripts/llama_cpp_setup.sh'
+      - 'scripts/run_qwen.sh'
+      - 'scripts/model_download.py'
+      - 'scripts/tool_calling_example.py'
       - 'Dockerfile'
       - '.github/workflows/run_qwen.yml'
 
 jobs:
   build-and-run:
-    runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set up Python 3.10
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-
-      - name: Install Python deps
-        run: |
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with: { python-version: '3.10' }
+      - run: |
           pip install --upgrade pip
           pip install huggingface_hub hf_transfer transformers
-
-      - name: Download Qwen3 model
-        run: python model_download.py
-
-      - name: Build llama.cpp
-        run: bash llama_cpp_setup.sh
-
-      - name: Run Qwen inference script
-        run: bash run_qwen.sh
+      - run: python scripts/model_download.py
+      - run: bash scripts/llama_cpp_setup.sh
+      - run: bash scripts/run_qwen.sh
 
