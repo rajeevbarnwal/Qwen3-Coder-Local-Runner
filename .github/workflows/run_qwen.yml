@@ -5,6 +5,9 @@ on:
     branches: [ main ]
     paths:
       - 'scripts/llama_cpp_setup.sh'
+      - 'scripts/run_qwen.sh'
+      - 'scripts/model_download.py'
+      - 'scripts/tool_calling_example.py'
       - 'Dockerfile'
       - '.github/workflows/run_qwen.yml'
   workflow_dispatch: {}
@@ -17,6 +20,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Cache llama.cpp build
+        uses: actions/cache@v3
+        with:
+          # caches the build directory so recompilation is skipped if unchanged
+          path: llama.cpp/build
+          key: ${{ runner.os }}-llama-build-${{ hashFiles('scripts/llama_cpp_setup.sh') }}
+
       - name: Set up Python 3.10
         uses: actions/setup-python@v4
         with:
@@ -27,13 +37,12 @@ jobs:
           pip install --upgrade pip
           pip install huggingface_hub hf_transfer transformers
 
-      - name: Build llama.cpp
-        run: bash scripts/llama_cpp_setup.sh
-
-      # Run these heavy steps *only* on manual dispatch
       - name: Download Qwen3 model
         if: ${{ github.event_name == 'workflow_dispatch' }}
         run: python scripts/model_download.py
+
+      - name: Build llama.cpp
+        run: bash scripts/llama_cpp_setup.sh
 
       - name: Run Qwen inference script
         if: ${{ github.event_name == 'workflow_dispatch' }}
