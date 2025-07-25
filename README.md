@@ -3,6 +3,8 @@ A guide and scripts to run Qwen3-Coder-480B-A35B locally with llama.cpp + Unslot
 
 # Qwen3-Coder-Local-Runner 🚀
 
+[![CI](https://github.com/rajeevbarnwal/Qwen3-Coder-Local-Runner/actions/workflows/run_qwen.yml/badge.svg)](https://github.com/rajeevbarnwal/Qwen3-Coder-Local-Runner/actions)
+
 > 🧠 Run Qwen3-Coder-480B-A35B locally using llama.cpp + Unsloth Dynamic GGUFs
 
 [![Stars](https://img.shields.io/github/stars/rajeevbarnwal/Qwen3-Coder-Local-Runner?style=social)](https://github.com/rajeevbarnwal/Qwen3-Coder-Local-Runner/stargazers)
