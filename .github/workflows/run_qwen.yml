@@ -1,5 +1,8 @@
+name: CI – Run Qwen3-Coder
+
 on:
   push:
+    branches: [ main ]
     paths:
       - 'scripts/llama_cpp_setup.sh'
       - 'scripts/run_qwen.sh'
@@ -10,14 +13,29 @@ on:
 
 jobs:
   build-and-run:
+    # **Add this line** to specify the runner
+    runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
-        with: { python-version: '3.10' }
-      - run: |
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install Python deps
+        run: |
           pip install --upgrade pip
           pip install huggingface_hub hf_transfer transformers
-      - run: python scripts/model_download.py
-      - run: bash scripts/llama_cpp_setup.sh
-      - run: bash scripts/run_qwen.sh
+
+      - name: Download Qwen3 model
+        run: python scripts/model_download.py
+
+      - name: Build llama.cpp
+        run: bash scripts/llama_cpp_setup.sh
+
+      - name: Run Qwen inference script
+        run: bash scripts/run_qwen.sh
 
