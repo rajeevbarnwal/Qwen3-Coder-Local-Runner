@@ -5,15 +5,12 @@ on:
     branches: [ main ]
     paths:
       - 'scripts/llama_cpp_setup.sh'
-      - 'scripts/run_qwen.sh'
-      - 'scripts/model_download.py'
-      - 'scripts/tool_calling_example.py'
       - 'Dockerfile'
       - '.github/workflows/run_qwen.yml'
+  workflow_dispatch: {}
 
 jobs:
   build-and-run:
-    # **Add this line** to specify the runner
     runs-on: ubuntu-latest
 
     steps:
@@ -30,12 +27,15 @@ jobs:
           pip install --upgrade pip
           pip install huggingface_hub hf_transfer transformers
 
-      - name: Download Qwen3 model
-        run: python scripts/model_download.py
-
       - name: Build llama.cpp
         run: bash scripts/llama_cpp_setup.sh
 
+      # Run these heavy steps *only* on manual dispatch
+      - name: Download Qwen3 model
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        run: python scripts/model_download.py
+
       - name: Run Qwen inference script
+        if: ${{ github.event_name == 'workflow_dispatch' }}
         run: bash scripts/run_qwen.sh
 
