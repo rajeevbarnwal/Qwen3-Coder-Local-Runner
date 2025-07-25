@@ -1,2 +1,2 @@
 # Qwen3-Coder-Local-Runner
-Run Qwen3-Coder locally with llama.cpp + Unsloth GGUFs
+A guide and scripts to run Qwen3-Coder-480B-A35B locally with llama.cpp + Unsloth GGUFs
